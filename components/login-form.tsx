@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { AlertCircle, Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 import { login, type LoginState } from "@/app/actions/auth";
@@ -8,10 +9,10 @@ import { useI18n } from "@/lib/i18n/client";
 
 const initialState: LoginState = {};
 
-/* ช่องกรอกแบบเส้นใต้ เหมือนช่องค้นหาหน้าแรก */
-const fieldClass =
+/* ช่องกรอกแบบเส้นใต้ เหมือนช่องค้นหาหน้าแรก (ใช้ร่วมกับฟอร์มสมัครสมาชิก) */
+export const fieldClass =
   "h-12 w-full border-0 border-b border-line bg-transparent pl-8 pr-3 text-[16px] text-cream placeholder:text-muted transition-colors focus:border-gold focus:outline-none";
-const iconClass =
+export const iconClass =
   "pointer-events-none absolute left-0 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted transition-colors group-focus-within:text-gold-light";
 
 export function LoginForm({
@@ -107,6 +108,16 @@ export function LoginForm({
           {isPending && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
           {isPending ? t.login.submitting : t.login.submit}
         </button>
+
+        <p className="text-center text-sm text-muted">
+          {t.login.noAccount}{" "}
+          <Link
+            href={next ? `/register?next=${encodeURIComponent(next)}` : "/register"}
+            className={`rounded-sm text-gold-light underline decoration-gold-dark underline-offset-4 hover:decoration-gold ${focusRing}`}
+          >
+            {t.login.signUpLink}
+          </Link>
+        </p>
 
         {showDemoHint && (
           <div className="border-y border-line py-4 text-sm">

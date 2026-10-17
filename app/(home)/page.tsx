@@ -32,8 +32,10 @@ export default async function HomePage() {
             ใบหน้าดาราทุกคน คนละ 1 ช่อง (ไม่วนซ้ำ): ขาวดำจาง ๆ ชี้แล้วเป็นสีพร้อมชื่อ
             จำนวนคอลัมน์ตั้งให้ช่องใหญ่พอที่ ~94 ใบหน้าเต็มจอ ส่วนที่เหลือท้ายกำแพงจมไปกับ gradient ด้านล่าง
             prefetch={false}: ลิงก์ทั้งหมดอยู่ในจอพร้อมกัน — ถ้า prefetch จะยิงคำขอหน้าดาราเกือบร้อยครั้งตอนเปิดหน้า
+            ยึดแค่ด้านบน (ไม่ใช่ inset-0): ถ้าล็อกความสูงกริด แถวจะถูกบีบให้พอดี section แต่ช่องยังเป็นสี่เหลี่ยมจัตุรัส
+            ใบหน้าเลยซ้อนกันบนจอกว้าง ๆ — ปล่อยให้กริดสูงตามแถวแล้วให้ section (overflow-hidden) ตัดส่วนเกินแทน
           */}
-          <ul aria-hidden className="absolute inset-0 -z-10 grid grid-cols-6 content-start sm:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12">
+          <ul aria-hidden className="absolute inset-x-0 top-0 -z-10 grid grid-cols-6 content-start sm:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12">
             {d.wall.map((a, i) => (
               <li key={a.id} className="group relative aspect-square overflow-hidden">
                 <Link href={`/actors/${a.id}`} prefetch={false} tabIndex={-1} className="block h-full w-full">

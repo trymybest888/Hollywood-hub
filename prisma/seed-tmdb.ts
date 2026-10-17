@@ -23,6 +23,14 @@ const CONCURRENCY = 6;
 const MIN_ACTING_CREDITS = 3;
 const DOCUMENTARY_GENRE = 99;
 
+/**
+ * บุคคลที่ไม่ใช่นักแสดงแต่หลุดตัวกรองด้านบน (หนังเกี่ยวกับเขาบางเรื่องไม่ได้ติดแท็กสารคดีใน TMDB)
+ * — ข้ามเสมอ และลบออกถ้ามีอยู่ในระบบแล้ว (tmdb person id)
+ */
+const EXCLUDED_PEOPLE = new Set<number>([
+  2342141, // Xi Jinping
+]);
+
 const genreMap: Record<number, string> = {
   28: "Action",
   12: "Adventure",
@@ -303,6 +311,11 @@ async function main() {
       page: String(page),
     });
     for (const p of results) {
+      if (EXCLUDED_PEOPLE.has(p.id)) {
+        const removed = await prisma.actors.deleteMany({ where: { tmdb_id: p.id } });
+        console.log(`  ข้าม ${p.name}: อยู่ในรายชื่อยกเว้น` + (removed.count ? " — ลบออกจากระบบแล้ว" : ""));
+        continue;
+      }
       if (p.known_for_department === "Acting" && p.profile_path && !seenPeople.has(p.id)) {
         seenPeople.add(p.id);
         people.push(p);
